@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Common verbs &middot; Marala's online practice</title>
+<style>
+  :root{
+    --green:#3a9a55;
+    --dark-green:#2c7a43;
+    --light-green:#eaf6ec;
+    --ink:#26333a;
+    --muted:#6b7a80;
+    --border:#dfe7e4;
+    --red:#d64545;
+    --red-bg:#fdecec;
+    --ok-bg:#e7f7ea;
+    --paper:#fffdf7;
+    --amber:#b8860b;
+    --amber-bg:#fbf3e0;
+    --shadow:0 4px 14px rgba(38,51,58,0.08);
+    font-family:'Segoe UI',Tahoma,Verdana,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:32px 16px 60px;
+    background:linear-gradient(180deg,#f4f8f4 0%, #eef3ee 100%);
+    color:var(--ink);
+  }
+  .wrap{ max-width:900px; margin:0 auto; }
+  .site-header{
+    text-align:center;
+    padding:18px 16px 22px;
+  }
+  .site-header h1{
+    margin:0;
+    color:var(--dark-green);
+    font-size:1.5rem;
+    font-weight:800;
+    letter-spacing:-0.3px;
+  }
+  .site-header p{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-style:italic;
+    font-size:0.95rem;
+  }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    text-decoration:none;
+    color:var(--dark-green);
+    font-weight:700;
+    font-size:0.9rem;
+    background:var(--light-green);
+    padding:8px 14px;
+    border-radius:8px;
+    margin-bottom:18px;
+    transition:background .15s ease;
+  }
+  .back-link:hover{ background:#d9f0dd; }
+  header{
+    background:var(--paper);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    padding:28px 32px;
+    margin-bottom:24px;
+    border-top:6px solid var(--green);
+  }
+  header h1{ margin:0 0 6px; color:var(--dark-green); font-size:1.9rem; letter-spacing:-0.5px; }
+  header p{ margin:0 0 6px; color:var(--muted); font-size:1.02rem; line-height:1.5; }
+  header p b{ color:var(--ink); }
+  .legend{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .tag{
+    font-size:0.75rem;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:20px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  .tag.positive{ background:var(--light-green); color:var(--dark-green); }
+  .tag.negative{ background:var(--red-bg); color:var(--red); }
+  .tag.question{ background:var(--amber-bg); color:var(--amber); }
+
+  .controls{
+    position:sticky;
+    top:0;
+    z-index:20;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:12px;
+    background:var(--paper);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:16px 20px;
+    margin-bottom:26px;
+  }
+  .btn{
+    border:none; cursor:pointer; font-size:0.95rem; font-weight:600;
+    padding:11px 20px; border-radius:9px;
+    transition:transform .08s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--green); color:#fff; }
+  .btn-primary:hover{ background:var(--dark-green); }
+  .btn-secondary{ background:#fff; color:var(--ink); border:1.5px solid var(--border); }
+  .btn-secondary:hover{ background:#f5f5f0; }
+  .score{
+    margin-left:auto; font-weight:700; font-size:1.05rem; color:var(--dark-green);
+    background:var(--light-green); padding:9px 16px; border-radius:9px; white-space:nowrap;
+  }
+  .list{ display:flex; flex-direction:column; gap:12px; }
+  .item{
+    background:var(--paper); border:1.5px solid var(--border); border-radius:12px;
+    padding:16px 18px; display:flex; align-items:center; flex-wrap:wrap; gap:12px;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .item.correct{ background:var(--ok-bg); border-color:#bfe3c6; }
+  .item.wrong{ background:var(--red-bg); border-color:#f3c6c6; }
+  .num{
+    flex:0 0 34px; height:34px; border-radius:50%; background:var(--light-green);
+    color:var(--dark-green); font-weight:700; display:flex; align-items:center;
+    justify-content:center; font-size:0.9rem;
+  }
+  .item.correct .num{ background:#cdeed6; }
+  .item.wrong .num{ background:#f6d3d3; }
+  .sentence{ flex:1 1 320px; font-size:1.08rem; line-height:1.6; }
+  input.blank{
+    font-family:inherit; font-size:1rem; font-weight:700; color:var(--dark-green);
+    padding:6px 10px; border-radius:7px; border:1.5px solid var(--green);
+    background:#fff; width:110px; margin:0 3px; text-align:center;
+  }
+  input.blank:focus{ outline:2px solid var(--green); outline-offset:1px; }
+  input.blank.correct{ border-color:#4caf6b; color:var(--dark-green); background:var(--ok-bg); }
+  input.blank.wrong{ border-color:var(--red); color:var(--red); background:var(--red-bg); }
+  .type-tag{
+    flex:0 0 auto; font-size:0.68rem; font-weight:700; padding:3px 9px;
+    border-radius:14px; text-transform:uppercase; letter-spacing:0.03em; order:3;
+  }
+  .type-tag.positive{ background:var(--light-green); color:var(--dark-green); }
+  .type-tag.negative{ background:var(--red-bg); color:var(--red); }
+  .type-tag.question{ background:var(--amber-bg); color:var(--amber); }
+  .check-one{
+    flex:0 0 auto; background:#fff; border:1.5px solid var(--green); color:var(--dark-green);
+    padding:7px 14px; font-size:0.85rem; font-weight:700; border-radius:8px; cursor:pointer;
+    order:4;
+  }
+  .check-one:hover{ background:var(--light-green); }
+  .feedback{ flex:0 0 100%; font-size:0.88rem; font-weight:600; margin-top:-2px; order:5; }
+  .feedback.ok{ color:var(--dark-green); }
+  .feedback.bad{ color:var(--red); }
+  footer{ text-align:center; color:var(--muted); margin-top:30px; font-size:0.9rem; }
+  @media (max-width:560px){
+    header{ padding:20px; }
+    .controls{ position:static; }
+    .score{ margin-left:0; width:100%; text-align:center; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-header">
+    <h1>Headway Beginner's</h1>
+    <p>Marala's online practice</p>
+  </div>
+
+  <a class="back-link" href="index.html">&larr; Back</a>
+
+  <header>
+    <h1>Common verbs</h1>
+    <p>Complete the sentences with <b>am, is, are, have</b> or <b>has</b>. In questions and negatives with <i>have</i>, use <b>do / does</b> or <b>don't / doesn't</b> as well. Some questions have two boxes: one for the auxiliary (do/does) and one for the verb (have). Capital letters don't matter, and for negatives the short and full forms are both fine (e.g. <i>isn't</i> or <i>is not</i>). Each round shows 20 sentences picked at random from a bank of 300 &mdash; press <b>New round</b> for a fresh set.</p>
+    <div class="legend">
+      <span class="tag positive">Positive</span>
+      <span class="tag negative">Negative</span>
+      <span class="tag question">Question</span>
+    </div>
+  </header>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="checkAllBtn">Check all</button>
+    <button class="btn btn-secondary" id="resetAllBtn">Reset answers</button>
+    <button class="btn btn-secondary" id="newRoundBtn">New round</button>
+    <div class="score" id="score">Score: 0 / 20</div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <footer>Headway Beginner's &middot; Marala's online practice</footer>
+</div>
+
+<script>
+  // ---------- DATA ----------
+  // Each entry: [sentence with one or more ___ blanks, accepted answers]
+  // accepted answers can be a flat array (one blank) or an array of arrays
+  // (one sub-array per blank, in order) for sentences with more than one gap.
+  //
+  // Positive statements use plain have/has ("I have a car").
+  // Negatives with have use don't/doesn't ("I don't have a car").
+  // Questions with have use TWO blanks: do/does + have, so the have/has verb
+  // itself is also practised, e.g. "___ you ___ a car?" -> "do" / "have".
+
+  function normalizeAccepted(raw){
+    // if raw is already an array of arrays (multi-blank), keep as is;
+    // otherwise wrap the flat array as a single blank.
+    return Array.isArray(raw[0]) ? raw : [raw];
+  }
+
+  const POSITIVE = [
+    ["I ___ a doctor.", ["am"]],
+    ["I ___ very tired today.", ["am"]],
+    ["I ___ two brothers.", ["have"]],
+    ["I ___ not hungry at the moment.", ["am"]],
+    ["I ___ a new laptop.", ["have"]],
+    ["I ___ from London.", ["am"]],
+    ["I ___ a lot of homework this evening.", ["have"]],
+    ["I ___ twenty-five years old.", ["am"]],
+    ["I ___ blue eyes.", ["have"]],
+    ["I ___ very happy today.", ["am"]],
+
+    ["You ___ very kind.", ["are"]],
+    ["You ___ a beautiful garden.", ["have"]],
+    ["You ___ late again.", ["are"]],
+    ["You ___ a nice car.", ["have"]],
+    ["You ___ my best friend.", ["are"]],
+    ["You ___ a good sense of humour.", ["have"]],
+    ["You ___ a good teacher.", ["are"]],
+    ["You ___ three cats.", ["have"]],
+    ["You ___ right about that.", ["are"]],
+    ["You ___ a lovely house.", ["have"]],
+
+    ["He ___ my older brother.", ["is"]],
+    ["He ___ a red bicycle.", ["has"]],
+    ["He ___ a football player.", ["is"]],
+    ["He ___ short hair.", ["has"]],
+    ["He ___ very clever.", ["is"]],
+    ["He ___ a good job in town.", ["has"]],
+    ["He ___ from Scotland.", ["is"]],
+    ["He ___ two children.", ["has"]],
+    ["He ___ tall and thin.", ["is"]],
+    ["He ___ a lot of friends.", ["has"]],
+
+    ["She ___ a nurse.", ["is"]],
+    ["She ___ long brown hair.", ["has"]],
+    ["She ___ very friendly.", ["is"]],
+    ["She ___ a small dog.", ["has"]],
+    ["She ___ my younger sister.", ["is"]],
+    ["She ___ a new phone.", ["has"]],
+    ["She ___ at work today.", ["is"]],
+    ["She ___ a lot of books.", ["has"]],
+    ["She ___ very busy this week.", ["is"]],
+    ["She ___ blue eyes and blonde hair.", ["has"]],
+
+    ["It ___ a lovely day.", ["is"]],
+    ["It ___ four legs.", ["has"]],
+    ["It ___ very cold outside.", ["is"]],
+    ["It ___ a big garden.", ["has"]],
+    ["It ___ my favourite film.", ["is"]],
+    ["It ___ three bedrooms.", ["has"]],
+    ["It ___ half past six.", ["is"]],
+    ["It ___ a swimming pool.", ["has"]],
+    ["It ___ a beautiful city.", ["is"]],
+    ["It ___ two floors.", ["has"]],
+
+    ["We ___ very happy today.", ["are"]],
+    ["We ___ a big family.", ["have"]],
+    ["We ___ students at this school.", ["are"]],
+    ["We ___ a lot of homework.", ["have"]],
+    ["We ___ from Poland.", ["are"]],
+    ["We ___ a nice flat in town.", ["have"]],
+    ["We ___ good friends.", ["are"]],
+    ["We ___ two cars.", ["have"]],
+    ["We ___ at home now.", ["are"]],
+    ["We ___ a holiday next week.", ["have"]],
+
+    ["They ___ very nice people.", ["are"]],
+    ["They ___ three children.", ["have"]],
+    ["They ___ at school now.", ["are"]],
+    ["They ___ a big house in the country.", ["have"]],
+    ["They ___ from Spain.", ["are"]],
+    ["They ___ a lot of money.", ["have"]],
+    ["They ___ my neighbours.", ["are"]],
+    ["They ___ two dogs and a cat.", ["have"]],
+    ["They ___ very tired after the trip.", ["are"]],
+    ["They ___ a new car.", ["have"]],
+
+    ["My father ___ a teacher.", ["is"]],
+    ["My mother ___ a new job.", ["has"]],
+    ["This book ___ very interesting.", ["is"]],
+    ["The dog ___ a short tail.", ["has"]],
+    ["My grandmother ___ eighty years old.", ["is"]],
+    ["Rosie ___ a beautiful smile.", ["has"]],
+    ["This exercise ___ quite easy.", ["is"]],
+    ["My brother ___ a motorbike.", ["has"]],
+    ["Our classroom ___ twenty-five desks.", ["has"]],
+    ["The weather ___ terrible today.", ["is"]],
+    ["My best friend ___ very funny.", ["is"]],
+    ["The film ___ a happy ending.", ["has"]],
+    ["This restaurant ___ good food.", ["has"]],
+    ["My uncle ___ a doctor in Leeds.", ["is"]],
+    ["The cat ___ green eyes.", ["has"]],
+
+    ["My parents ___ both teachers.", ["are"]],
+    ["My sisters ___ long hair.", ["have"]],
+    ["The children ___ in the garden.", ["are"]],
+    ["These shoes ___ very comfortable.", ["are"]],
+    ["My grandparents ___ a farm in the countryside.", ["have"]],
+    ["The students ___ very quiet today.", ["are"]],
+    ["Ben and Sam ___ good friends.", ["are"]],
+    ["The windows ___ very dirty.", ["are"]],
+    ["My cousins ___ a big house near the beach.", ["have"]],
+    ["Our neighbours ___ three cars.", ["have"]],
+    ["The books ___ on the table.", ["are"]],
+    ["My friends ___ all very friendly.", ["are"]],
+    ["The teachers ___ a meeting today.", ["have"]],
+    ["Her keys ___ in her bag.", ["are"]],
+    ["The children ___ a lot of toys.", ["have"]],
+  ].map(([s, a]) => [s, normalizeAccepted(a), "positive"]);
+
+  const NEGATIVE = [
+    ["I ___ a teacher.", ["am not"]],
+    ["I ___ tired this evening.", ["am not"]],
+    ["I ___ have any children.", ["don't", "do not"]],
+    ["I ___ hungry at the moment.", ["am not"]],
+    ["I ___ have a car of my own.", ["don't", "do not"]],
+    ["I ___ late for work.", ["am not"]],
+    ["I ___ have any brothers.", ["don't", "do not"]],
+    ["I ___ from Italy.", ["am not"]],
+    ["I ___ have much free time this week.", ["don't", "do not"]],
+    ["I ___ ready yet.", ["am not"]],
+
+    ["You ___ right about that.", ["are not", "aren't"]],
+    ["You ___ have a new phone.", ["don't", "do not"]],
+    ["You ___ very tall.", ["are not", "aren't"]],
+    ["You ___ have any pets.", ["don't", "do not"]],
+    ["You ___ at home now.", ["are not", "aren't"]],
+    ["You ___ have a driving licence.", ["don't", "do not"]],
+    ["You ___ from Germany.", ["are not", "aren't"]],
+    ["You ___ have enough time today.", ["don't", "do not"]],
+    ["You ___ very careful.", ["are not", "aren't"]],
+    ["You ___ have a bicycle.", ["don't", "do not"]],
+
+    ["He ___ a doctor.", ["is not", "isn't"]],
+    ["He ___ have a sister.", ["doesn't", "does not"]],
+    ["He ___ very tall.", ["is not", "isn't"]],
+    ["He ___ have a job at the moment.", ["doesn't", "does not"]],
+    ["He ___ from Wales.", ["is not", "isn't"]],
+    ["He ___ have any money.", ["doesn't", "does not"]],
+    ["He ___ at school today.", ["is not", "isn't"]],
+    ["He ___ have a car.", ["doesn't", "does not"]],
+    ["He ___ happy about the news.", ["is not", "isn't"]],
+    ["He ___ have many friends here.", ["doesn't", "does not"]],
+
+    ["She ___ a nurse.", ["is not", "isn't"]],
+    ["She ___ have a dog.", ["doesn't", "does not"]],
+    ["She ___ very busy today.", ["is not", "isn't"]],
+    ["She ___ have a new job.", ["doesn't", "does not"]],
+    ["She ___ from Scotland.", ["is not", "isn't"]],
+    ["She ___ have any brothers or sisters.", ["doesn't", "does not"]],
+    ["She ___ at work now.", ["is not", "isn't"]],
+    ["She ___ have a laptop.", ["doesn't", "does not"]],
+    ["She ___ very old.", ["is not", "isn't"]],
+    ["She ___ have much homework tonight.", ["doesn't", "does not"]],
+
+    ["It ___ very cold today.", ["is not", "isn't"]],
+    ["It ___ have four bedrooms.", ["doesn't", "does not"]],
+    ["It ___ a good film.", ["is not", "isn't"]],
+    ["It ___ have a garden.", ["doesn't", "does not"]],
+    ["It ___ Monday today.", ["is not", "isn't"]],
+    ["It ___ have a swimming pool.", ["doesn't", "does not"]],
+    ["It ___ my favourite colour.", ["is not", "isn't"]],
+    ["It ___ have enough rooms for us.", ["doesn't", "does not"]],
+    ["It ___ very expensive.", ["is not", "isn't"]],
+    ["It ___ have a lift.", ["doesn't", "does not"]],
+
+    ["We ___ ready for the exam.", ["are not", "aren't"]],
+    ["We ___ have much time left.", ["don't", "do not"]],
+    ["We ___ from Portugal.", ["are not", "aren't"]],
+    ["We ___ have a garden.", ["don't", "do not"]],
+    ["We ___ at school today.", ["are not", "aren't"]],
+    ["We ___ have any homework this weekend.", ["don't", "do not"]],
+    ["We ___ very hungry.", ["are not", "aren't"]],
+    ["We ___ have a television in our room.", ["don't", "do not"]],
+    ["We ___ late for the meeting.", ["are not", "aren't"]],
+    ["We ___ have enough chairs.", ["don't", "do not"]],
+
+    ["They ___ students at this school.", ["are not", "aren't"]],
+    ["They ___ have a big house.", ["don't", "do not"]],
+    ["They ___ from Canada.", ["are not", "aren't"]],
+    ["They ___ have any children.", ["don't", "do not"]],
+    ["They ___ happy with the result.", ["are not", "aren't"]],
+    ["They ___ have a car.", ["don't", "do not"]],
+    ["They ___ at home this evening.", ["are not", "aren't"]],
+    ["They ___ have much money.", ["don't", "do not"]],
+    ["They ___ very friendly.", ["are not", "aren't"]],
+    ["They ___ have a garden at their flat.", ["don't", "do not"]],
+
+    ["My father ___ a teacher.", ["is not", "isn't"]],
+    ["My mother ___ have a car.", ["doesn't", "does not"]],
+    ["This book ___ very interesting.", ["is not", "isn't"]],
+    ["The dog ___ have a long tail.", ["doesn't", "does not"]],
+    ["My grandfather ___ very well today.", ["is not", "isn't"]],
+    ["Tom ___ have a bicycle.", ["doesn't", "does not"]],
+    ["This exercise ___ difficult.", ["is not", "isn't"]],
+    ["My sister ___ have a driving licence.", ["doesn't", "does not"]],
+    ["Our classroom ___ very big.", ["is not", "isn't"]],
+    ["The weather ___ nice today.", ["is not", "isn't"]],
+    ["My best friend ___ have a mobile phone.", ["doesn't", "does not"]],
+    ["The film ___ very long.", ["is not", "isn't"]],
+    ["This restaurant ___ have any free tables.", ["doesn't", "does not"]],
+    ["My uncle ___ from London.", ["is not", "isn't"]],
+    ["The cat ___ have a name yet.", ["doesn't", "does not"]],
+
+    ["My parents ___ at home this evening.", ["are not", "aren't"]],
+    ["My sisters ___ have long hair.", ["don't", "do not"]],
+    ["The children ___ in the garden now.", ["are not", "aren't"]],
+    ["These shoes ___ very comfortable.", ["are not", "aren't"]],
+    ["My grandparents ___ have a car.", ["don't", "do not"]],
+    ["The students ___ ready for the test.", ["are not", "aren't"]],
+    ["Ben and Sam ___ good friends.", ["are not", "aren't"]],
+    ["The windows ___ clean.", ["are not", "aren't"]],
+    ["My cousins ___ have a house near the sea.", ["don't", "do not"]],
+    ["Our neighbours ___ have a garden.", ["don't", "do not"]],
+    ["The books ___ on the shelf.", ["are not", "aren't"]],
+    ["My friends ___ very busy this week.", ["are not", "aren't"]],
+    ["The teachers ___ have a meeting today.", ["don't", "do not"]],
+    ["Her keys ___ on the table.", ["are not", "aren't"]],
+    ["The children ___ have many toys.", ["don't", "do not"]],
+  ].map(([s, a]) => [s, normalizeAccepted(a), "negative"]);
+
+  const QUESTION = [
+    ["___ I late for the meeting?", ["am"]],
+    ["___ I right about this?", ["am"]],
+    ["___ I a good friend?", ["am"]],
+    ["___ I ___ your book?", [["do"], ["have"]]],
+    ["___ I ___ enough time?", [["do"], ["have"]]],
+    ["___ I ready?", ["am"]],
+    ["___ I ___ your pen?", [["do"], ["have"]]],
+    ["___ I too noisy?", ["am"]],
+    ["___ I ___ your address?", [["do"], ["have"]]],
+    ["___ I early?", ["am"]],
+
+    ["___ you a doctor?", ["are"]],
+    ["___ you ___ a car?", [["do"], ["have"]]],
+    ["___ you ready?", ["are"]],
+    ["___ you ___ any brothers or sisters?", [["do"], ["have"]]],
+    ["___ you from Spain?", ["are"]],
+    ["___ you ___ a pet at home?", [["do"], ["have"]]],
+    ["___ you busy today?", ["are"]],
+    ["___ you ___ my keys?", [["do"], ["have"]]],
+    ["___ you happy with your job?", ["are"]],
+    ["___ you ___ a bicycle?", [["do"], ["have"]]],
+
+    ["___ he a teacher?", ["is"]],
+    ["___ he ___ a car?", [["does"], ["have"]]],
+    ["___ he tall?", ["is"]],
+    ["___ he ___ any children?", [["does"], ["have"]]],
+    ["___ he from France?", ["is"]],
+    ["___ he ___ a job in town?", [["does"], ["have"]]],
+    ["___ he at home now?", ["is"]],
+    ["___ he ___ a sister?", [["does"], ["have"]]],
+    ["___ he happy at school?", ["is"]],
+    ["___ he ___ a lot of friends?", [["does"], ["have"]]],
+
+    ["___ she a nurse?", ["is"]],
+    ["___ she ___ a dog?", [["does"], ["have"]]],
+    ["___ she busy today?", ["is"]],
+    ["___ she ___ a new job?", [["does"], ["have"]]],
+    ["___ she from Italy?", ["is"]],
+    ["___ she ___ any brothers?", [["does"], ["have"]]],
+    ["___ she at work now?", ["is"]],
+    ["___ she ___ a laptop?", [["does"], ["have"]]],
+    ["___ she happy about the news?", ["is"]],
+    ["___ she ___ long hair?", [["does"], ["have"]]],
+
+    ["___ it cold outside?", ["is"]],
+    ["___ it ___ four bedrooms?", [["does"], ["have"]]],
+    ["___ it a good film?", ["is"]],
+    ["___ it ___ a garden?", [["does"], ["have"]]],
+    ["___ it Monday today?", ["is"]],
+    ["___ it ___ a swimming pool?", [["does"], ["have"]]],
+    ["___ it far from here?", ["is"]],
+    ["___ it ___ enough rooms?", [["does"], ["have"]]],
+    ["___ it expensive?", ["is"]],
+    ["___ it ___ a lift?", [["does"], ["have"]]],
+
+    ["___ we late?", ["are"]],
+    ["___ we ___ enough chairs?", [["do"], ["have"]]],
+    ["___ we ready for the test?", ["are"]],
+    ["___ we ___ any homework tonight?", [["do"], ["have"]]],
+    ["___ we right about the answer?", ["are"]],
+    ["___ we ___ a meeting today?", [["do"], ["have"]]],
+    ["___ we early for the film?", ["are"]],
+    ["___ we ___ time for a coffee?", [["do"], ["have"]]],
+    ["___ we in the right classroom?", ["are"]],
+    ["___ we ___ a car for the trip?", [["do"], ["have"]]],
+
+    ["___ they new students at this school?", ["are"]],
+    ["___ they ___ a big house?", [["do"], ["have"]]],
+    ["___ they from Canada?", ["are"]],
+    ["___ they ___ any children?", [["do"], ["have"]]],
+    ["___ they happy with the result?", ["are"]],
+    ["___ they ___ a car?", [["do"], ["have"]]],
+    ["___ they at home this evening?", ["are"]],
+    ["___ they ___ much money?", [["do"], ["have"]]],
+    ["___ they friendly?", ["are"]],
+    ["___ they ___ a garden at their flat?", [["do"], ["have"]]],
+
+    ["___ your father a teacher?", ["is"]],
+    ["___ your mother ___ a car?", [["does"], ["have"]]],
+    ["___ this book interesting?", ["is"]],
+    ["___ the dog ___ a long tail?", [["does"], ["have"]]],
+    ["___ your grandfather well today?", ["is"]],
+    ["___ Tom ___ a bicycle?", [["does"], ["have"]]],
+    ["___ this exercise difficult?", ["is"]],
+    ["___ your sister ___ a driving licence?", [["does"], ["have"]]],
+    ["___ your new classroom big?", ["is"]],
+    ["___ the weather nice today?", ["is"]],
+    ["___ your best friend ___ a mobile phone?", [["does"], ["have"]]],
+    ["___ the film very long?", ["is"]],
+    ["___ this restaurant ___ any free tables?", [["does"], ["have"]]],
+    ["___ your uncle from London?", ["is"]],
+    ["___ the cat ___ a name yet?", [["does"], ["have"]]],
+
+    ["___ your parents at home this evening?", ["are"]],
+    ["___ your sisters ___ long hair?", [["do"], ["have"]]],
+    ["___ the children in the garden?", ["are"]],
+    ["___ these shoes comfortable?", ["are"]],
+    ["___ your grandparents ___ a car?", [["do"], ["have"]]],
+    ["___ the students ready for the test?", ["are"]],
+    ["___ Ben and Sam good friends?", ["are"]],
+    ["___ the windows clean?", ["are"]],
+    ["___ your cousins ___ a house near the sea?", [["do"], ["have"]]],
+    ["___ our neighbours ___ a garden?", [["do"], ["have"]]],
+    ["___ the books on the shelf?", ["are"]],
+    ["___ your friends busy this week?", ["are"]],
+    ["___ the teachers ___ a meeting today?", [["do"], ["have"]]],
+    ["___ her keys on the table?", ["are"]],
+    ["___ the children ___ many toys?", [["do"], ["have"]]],
+  ].map(([s, a]) => [s, normalizeAccepted(a), "question"]);
+
+  const ALL_DATA = [...POSITIVE, ...NEGATIVE, ...QUESTION];
+
+  // ---------- HELPERS ----------
+  function normalize(str){
+    return str
+      .toLowerCase()
+      .trim()
+      .replace(/[’‘]/g, "'")
+      .replace(/'/g, "")
+      .replace(/[.?!]/g, "")
+      .replace(/\s+/g, " ");
+  }
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  const ROUND_SIZE = 20;
+  const listEl = document.getElementById("list");
+  const scoreEl = document.getElementById("score");
+  let currentRound = [];
+
+  function pickRound(n){
+    return shuffle(ALL_DATA).slice(0, n);
+  }
+
+  function buildItem(index, sentence, acceptedBlanks, type){
+    const parts = sentence.split("___"); // parts.length === acceptedBlanks.length + 1
+    const item = document.createElement("div");
+    item.className = "item";
+    item.dataset.accepted = JSON.stringify(acceptedBlanks.map(list => list.map(normalize)));
+    item.dataset.display = JSON.stringify(acceptedBlanks.map(list => list.join(" / ")));
+
+    const num = document.createElement("div");
+    num.className = "num";
+    num.textContent = index + 1;
+    item.appendChild(num);
+
+    const sentenceEl = document.createElement("div");
+    sentenceEl.className = "sentence";
+
+    parts.forEach((part, i) => {
+      sentenceEl.appendChild(document.createTextNode(part));
+      if (i < parts.length - 1){
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "blank";
+        input.autocomplete = "off";
+        input.autocapitalize = "off";
+        input.spellcheck = false;
+        input.placeholder = "...";
+        input.dataset.blankIndex = i;
+        input.addEventListener("input", () => {
+          item.classList.remove("correct", "wrong");
+          input.classList.remove("correct", "wrong");
+          feedback.textContent = "";
+          feedback.className = "feedback";
+          updateScore();
+        });
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter"){
+            e.preventDefault();
+            checkOne(item);
+          }
+        });
+        sentenceEl.appendChild(input);
+      }
+    });
+
+    item.appendChild(sentenceEl);
+
+    const typeTag = document.createElement("div");
+    typeTag.className = "type-tag " + type;
+    typeTag.textContent = type;
+    item.appendChild(typeTag);
+
+    const checkBtn = document.createElement("button");
+    checkBtn.className = "check-one";
+    checkBtn.type = "button";
+    checkBtn.textContent = "Check";
+    checkBtn.addEventListener("click", () => checkOne(item));
+    item.appendChild(checkBtn);
+
+    const feedback = document.createElement("div");
+    feedback.className = "feedback";
+    item.appendChild(feedback);
+
+    return item;
+  }
+
+  function checkOne(item){
+    const inputs = Array.from(item.querySelectorAll("input.blank"));
+    const feedback = item.querySelector(".feedback");
+    const accepted = JSON.parse(item.dataset.accepted);
+    const display = JSON.parse(item.dataset.display);
+
+    const values = inputs.map(inp => normalize(inp.value));
+
+    if (values.some(v => !v)){
+      inputs.forEach((inp, i) => {
+        inp.classList.remove("correct", "wrong");
+        if (!values[i]) inp.classList.add("wrong");
+      });
+      item.classList.remove("correct");
+      item.classList.add("wrong");
+      feedback.className = "feedback bad";
+      feedback.textContent = "Please fill in every box first.";
+      updateScore();
+      return;
+    }
+
+    let allCorrect = true;
+    inputs.forEach((inp, i) => {
+      const ok = accepted[i].includes(values[i]);
+      inp.classList.remove("correct", "wrong");
+      inp.classList.add(ok ? "correct" : "wrong");
+      if (!ok) allCorrect = false;
+    });
+
+    item.classList.remove("correct", "wrong");
+    if (allCorrect){
+      item.classList.add("correct");
+      feedback.className = "feedback ok";
+      feedback.textContent = "Correct!";
+    } else {
+      item.classList.add("wrong");
+      feedback.className = "feedback bad";
+      if (display.length === 1){
+        feedback.textContent = "Wrong. The correct answer is \"" + display[0] + "\".";
+      } else {
+        feedback.textContent = "Wrong. Correct answers: " + display.join(", ") + ".";
+      }
+    }
+    updateScore();
+  }
+
+  function checkAll(){
+    document.querySelectorAll(".item").forEach(checkOne);
+  }
+
+  function render(){
+    listEl.innerHTML = "";
+    currentRound.forEach((entry, i) => {
+      const [sentence, accepted, type] = entry;
+      listEl.appendChild(buildItem(i, sentence, accepted, type));
+    });
+    updateScore();
+  }
+
+  function resetAnswers(){
+    // clear inputs for the current round without picking new sentences
+    render();
+    window.scrollTo({ top: listEl.offsetTop - 140, behavior: "smooth" });
+  }
+
+  function newRound(){
+    currentRound = pickRound(ROUND_SIZE);
+    render();
+    window.scrollTo({ top: listEl.offsetTop - 140, behavior: "smooth" });
+  }
+
+  function updateScore(){
+    const total = document.querySelectorAll(".item").length;
+    const correct = document.querySelectorAll(".item.correct").length;
+    scoreEl.textContent = "Score: " + correct + " / " + total;
+  }
+
+  document.getElementById("checkAllBtn").addEventListener("click", checkAll);
+  document.getElementById("resetAllBtn").addEventListener("click", resetAnswers);
+  document.getElementById("newRoundBtn").addEventListener("click", newRound);
+
+  // initial round
+  currentRound = pickRound(ROUND_SIZE);
+  render();
+</script>
+</body>
+</html>
