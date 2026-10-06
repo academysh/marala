@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Present Simple &middot; Marala's online practice</title>
+<style>
+  :root{
+    --green:#3a9a55;
+    --dark-green:#2c7a43;
+    --light-green:#eaf6ec;
+    --ink:#26333a;
+    --muted:#6b7a80;
+    --faint:#a0abb0;
+    --border:#dfe7e4;
+    --red:#d64545;
+    --red-bg:#fdecec;
+    --ok-bg:#e7f7ea;
+    --paper:#fffdf7;
+    --amber:#b8860b;
+    --amber-bg:#fbf3e0;
+    --shadow:0 4px 14px rgba(38,51,58,0.08);
+    font-family:'Segoe UI',Tahoma,Verdana,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:32px 16px 60px;
+    background:linear-gradient(180deg,#f4f8f4 0%, #eef3ee 100%);
+    color:var(--ink);
+  }
+  .wrap{ max-width:940px; margin:0 auto; }
+  .site-header{ text-align:center; padding:18px 16px 22px; }
+  .site-header h1{
+    margin:0; color:var(--dark-green); font-size:1.5rem; font-weight:800; letter-spacing:-0.3px;
+  }
+  .site-header p{ margin:4px 0 0; color:var(--muted); font-style:italic; font-size:0.95rem; }
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+    color:var(--dark-green); font-weight:700; font-size:0.9rem; background:var(--light-green);
+    padding:8px 14px; border-radius:8px; margin-bottom:18px; transition:background .15s ease;
+  }
+  .back-link:hover{ background:#d9f0dd; }
+  header.page-header{
+    background:var(--paper); border-radius:16px; box-shadow:var(--shadow);
+    padding:28px 32px; margin-bottom:24px; border-top:6px solid var(--green);
+  }
+  header.page-header h1{ margin:0 0 6px; color:var(--dark-green); font-size:1.9rem; letter-spacing:-0.5px; }
+  header.page-header p{ margin:0 0 8px; color:var(--muted); font-size:1.02rem; line-height:1.55; }
+  header.page-header p b{ color:var(--ink); }
+  /* ---- The rule (collapsible) ---- */
+  details.rule{
+    background:var(--paper); border:1.5px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow); margin-bottom:24px; overflow:hidden;
+  }
+  details.rule summary{
+    list-style:none; cursor:pointer; user-select:none; display:flex; align-items:center; gap:12px;
+    padding:16px 22px; color:var(--dark-green); font-weight:800; font-size:1.15rem;
+    transition:background .15s ease;
+  }
+  details.rule summary::-webkit-details-marker{ display:none; }
+  details.rule summary:hover{ background:var(--light-green); }
+  details.rule summary:focus-visible{ outline:2px solid var(--green); outline-offset:-2px; }
+  .rule-sub{ color:var(--muted); font-weight:600; font-size:0.9rem; }
+  .rule-hint{
+    margin-left:auto; color:var(--muted); font-weight:600; font-size:0.85rem;
+  }
+  .rule-hint::before{ content:"Show"; }
+  details.rule[open] .rule-hint::before{ content:"Hide"; }
+  details.rule summary::after{
+    content:"\25BE"; font-size:1.15rem; transition:transform .2s ease;
+  }
+  details.rule[open] summary::after{ transform:rotate(180deg); }
+  details.rule[open] summary{ border-bottom:1.5px solid var(--border); }
+
+  .rule-body{ padding:20px 22px 22px; }
+  .table-wrap{ overflow-x:auto; }
+  table.rule-table{
+    width:100%; min-width:600px; border-collapse:separate; border-spacing:0;
+    border:1.5px solid var(--border); border-radius:12px; overflow:hidden; background:#fff;
+  }
+  table.rule-table th, table.rule-table td{
+    padding:12px 14px; text-align:left; font-size:1rem; line-height:1.5;
+    border-bottom:1.5px solid var(--border);
+  }
+  table.rule-table tbody tr:last-child th, table.rule-table tbody tr:last-child td{ border-bottom:none; }
+  table.rule-table thead th{
+    font-size:0.75rem; text-transform:uppercase; letter-spacing:0.04em; font-weight:700;
+  }
+  table.rule-table thead th.pos{ background:var(--light-green); color:var(--dark-green); }
+  table.rule-table thead th.neg{ background:var(--red-bg); color:var(--red); }
+  table.rule-table thead th.que{ background:var(--amber-bg); color:var(--amber); }
+  table.rule-table thead th:first-child{ background:#fff; }
+  table.rule-table tbody th{ font-weight:800; color:var(--ink); white-space:nowrap; background:#fafaf5; }
+  table.rule-table td.p b{ color:var(--dark-green); }
+  table.rule-table td.n b{ color:var(--red); }
+  table.rule-table td.q b{ color:var(--amber); }
+
+  .rule-points{ margin:18px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; }
+  .rule-points li{ padding-left:22px; position:relative; line-height:1.5; font-size:1rem; }
+  .rule-points li::before{
+    content:""; position:absolute; left:2px; top:0.6em; width:8px; height:8px;
+    border-radius:50%; background:var(--green);
+  }
+  .rule-points .ru{ display:block; color:var(--faint); font-size:0.88rem; margin-top:2px; }
+
+  .rule-label{
+    margin:22px 0 8px; font-size:0.78rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.04em; color:var(--muted);
+  }
+  table.spell-table{
+    width:100%; min-width:520px; border-collapse:separate; border-spacing:0;
+    border:1.5px solid var(--border); border-radius:12px; overflow:hidden; background:#fff;
+  }
+  table.spell-table th, table.spell-table td{
+    padding:10px 14px; text-align:left; font-size:0.97rem; line-height:1.5;
+    border-bottom:1.5px solid var(--border);
+  }
+  table.spell-table tr:last-child th, table.spell-table tr:last-child td{ border-bottom:none; }
+  table.spell-table th{ font-weight:700; color:var(--ink); background:#fafaf5; width:38%; }
+  table.spell-table td b{ color:var(--dark-green); }
+  .arrow{ color:var(--faint); padding:0 4px; }
+
+  .rule-tip{
+    margin-top:20px; padding:12px 16px; border-radius:10px; background:var(--light-green);
+    color:var(--ink); font-size:0.95rem; line-height:1.5;
+  }
+  .rule-tip b{ color:var(--dark-green); }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .tag{
+    font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:20px;
+    text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .tag.positive{ background:var(--light-green); color:var(--dark-green); }
+  .tag.negative{ background:var(--red-bg); color:var(--red); }
+  .tag.question{ background:var(--amber-bg); color:var(--amber); }
+
+  .controls{
+    position:sticky; top:0; z-index:20; display:flex; flex-wrap:wrap; align-items:center; gap:12px;
+    background:var(--paper); border-radius:14px; box-shadow:var(--shadow);
+    padding:16px 20px; margin-bottom:26px;
+  }
+  .btn{
+    border:none; cursor:pointer; font-size:0.95rem; font-weight:600; padding:11px 20px; border-radius:9px;
+    transition:transform .08s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--green); color:#fff; }
+  .btn-primary:hover{ background:var(--dark-green); }
+  .btn-secondary{ background:#fff; color:var(--ink); border:1.5px solid var(--border); }
+  .btn-secondary:hover{ background:#f5f5f0; }
+  .score{
+    margin-left:auto; font-weight:700; font-size:1.05rem; color:var(--dark-green);
+    background:var(--light-green); padding:9px 16px; border-radius:9px; white-space:nowrap;
+  }
+
+  .list{ display:flex; flex-direction:column; gap:12px; }
+  .item{
+    background:var(--paper); border:1.5px solid var(--border); border-radius:12px;
+    padding:16px 18px; display:flex; align-items:center; flex-wrap:wrap; gap:14px;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .item.correct{ background:var(--ok-bg); border-color:#bfe3c6; }
+  .item.wrong{ background:var(--red-bg); border-color:#f3c6c6; }
+  .num{
+    flex:0 0 34px; height:34px; border-radius:50%; background:var(--light-green);
+    color:var(--dark-green); font-weight:700; display:flex; align-items:center;
+    justify-content:center; font-size:0.9rem;
+  }
+  .item.correct .num{ background:#cdeed6; }
+  .item.wrong .num{ background:#f6d3d3; }
+
+  .main{ flex:1 1 340px; min-width:0; }
+  .sentence{ font-size:1.08rem; line-height:1.9; }
+  .translation{ margin-top:2px; font-size:0.88rem; line-height:1.4; color:var(--faint); }
+
+  .verb{
+    flex:0 0 150px; display:flex; flex-direction:column; align-items:flex-start; gap:4px;
+  }
+  .verb-base{ font-weight:800; font-size:1rem; color:var(--ink); }
+  .verb-ru{
+    color:var(--faint); font-size:0.88rem; line-height:1.4;
+  }
+
+  input.blank{
+    font-family:inherit; font-size:1rem; font-weight:700; color:var(--dark-green);
+    padding:6px 10px; border-radius:7px; border:1.5px solid var(--green);
+    background:#fff; margin:0 3px; text-align:center; width:120px;
+  }
+  .item.negative input.blank{ width:190px; }
+  .item.question input.blank:nth-of-type(1){ width:90px; }
+  .item.question input.blank:nth-of-type(2){ width:130px; }
+  input.blank:focus{ outline:2px solid var(--green); outline-offset:1px; }
+  input.blank.correct{ border-color:#4caf6b; color:var(--dark-green); background:var(--ok-bg); }
+  input.blank.wrong{ border-color:var(--red); color:var(--red); background:var(--red-bg); }
+
+  .type-tag{
+    flex:0 0 auto; min-width:82px; text-align:center; font-size:0.68rem; font-weight:700;
+    padding:3px 9px; border-radius:14px; text-transform:uppercase; letter-spacing:0.03em; order:3;
+  }
+  .type-tag.positive{ background:var(--light-green); color:var(--dark-green); }
+  .type-tag.negative{ background:var(--red-bg); color:var(--red); }
+  .type-tag.question{ background:var(--amber-bg); color:var(--amber); }
+  .check-one{
+    flex:0 0 auto; background:#fff; border:1.5px solid var(--green); color:var(--dark-green);
+    padding:7px 14px; font-size:0.85rem; font-weight:700; border-radius:8px; cursor:pointer; order:4;
+  }
+  .check-one:hover{ background:var(--light-green); }
+  .feedback{ flex:0 0 100%; font-size:0.88rem; font-weight:600; margin-top:-4px; order:5; }
+  .feedback.ok{ color:var(--dark-green); }
+  .feedback.bad{ color:var(--red); }
+  footer{ text-align:center; color:var(--muted); margin-top:30px; font-size:0.9rem; }
+
+  @media (max-width:640px){
+    header.page-header{ padding:20px; }
+    .controls{ position:static; }
+    .score{ margin-left:0; width:100%; text-align:center; }
+    .verb{ flex:1 1 100%; flex-direction:row; align-items:center; gap:10px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-header">
+    <h1>Headway Beginner's</h1>
+    <p>Marala's online practice</p>
+  </div>
+
+  <a class="back-link" href="index.html">&larr; Back</a>
+
+  <header class="page-header">
+    <h1>Present Simple</h1>
+    <p>Put the verb in brackets into the correct form.</p>
+    <div class="legend">
+      <span class="tag positive">Positive</span>
+      <span class="tag negative">Negative</span>
+      <span class="tag question">Question</span>
+    </div>
+  </header>
+
+  <details class="rule">
+    <summary>
+      <span>The rule</span>
+      <span class="rule-sub">Present Simple</span>
+      <span class="rule-hint"></span>
+    </summary>
+    <div class="rule-body">
+
+      <div class="table-wrap">
+        <table class="rule-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="pos">Positive</th>
+              <th class="neg">Negative</th>
+              <th class="que">Question</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">I / you / we / they</th>
+              <td class="p">I <b>work</b> in a bank.</td>
+              <td class="n">I <b>don't work</b> in a bank.</td>
+              <td class="q"><b>Do</b> you <b>work</b> in a bank?</td>
+            </tr>
+            <tr>
+              <th scope="row">he / she / it</th>
+              <td class="p">She <b>works</b> in a bank.</td>
+              <td class="n">She <b>doesn't work</b> in a bank.</td>
+              <td class="q"><b>Does</b> she <b>work</b> in a bank?</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="rule-points">
+        <li>
+          We use the Present Simple for habits, routines and facts: <i>She gets up at seven. The sun rises in the east.</i>
+          <span class="ru">Present Simple используется для привычек, распорядка дня и фактов.</span>
+        </li>
+        <li>
+          With <b>he / she / it</b> the verb takes <b>-s</b>: <i>I work &rarr; she works.</i>
+          <span class="ru">С he / she / it к глаголу добавляется -s.</span>
+        </li>
+        <li>
+          In negatives and questions, <b>do / does</b> shows the person, and the main verb stays in its base form: <i>She doesn't work</i> (not <i>doesn't works</i>), <i>Does she work?</i> (not <i>Does she works?</i>).
+          <span class="ru">В отрицаниях и вопросах лицо показывает do / does, а основной глагол остаётся в базовой форме.</span>
+        </li>
+      </ul>
+
+      <div class="rule-label">He / she / it: spelling</div>
+      <div class="table-wrap">
+        <table class="spell-table">
+          <tbody>
+            <tr>
+              <th scope="row">Most verbs: + s</th>
+              <td>work &rarr; work<b>s</b> &nbsp;&middot;&nbsp; play &rarr; play<b>s</b> &nbsp;&middot;&nbsp; live &rarr; live<b>s</b></td>
+            </tr>
+            <tr>
+              <th scope="row">-ch, -sh, -s, -x, -o: + es</th>
+              <td>watch &rarr; watch<b>es</b> &nbsp;&middot;&nbsp; wash &rarr; wash<b>es</b> &nbsp;&middot;&nbsp; go &rarr; go<b>es</b> &nbsp;&middot;&nbsp; do &rarr; do<b>es</b></td>
+            </tr>
+            <tr>
+              <th scope="row">consonant + y: y &rarr; ies</th>
+              <td>study &rarr; stud<b>ies</b> &nbsp;&middot;&nbsp; try &rarr; tr<b>ies</b></td>
+            </tr>
+            <tr>
+              <th scope="row">Irregular</th>
+              <td>have &rarr; <b>has</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rule-tip">
+        <b>In the exercises:</b> in negatives write the whole form (<i>don't work</i> or <i>does not work</i>). In questions fill in both gaps: <i>do / does</i> and the verb. Capital letters don't matter.
+      </div>
+
+    </div>
+  </details>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="checkAllBtn">Check all</button>
+    <button class="btn btn-secondary" id="resetAllBtn">Reset answers</button>
+    <button class="btn btn-secondary" id="newRoundBtn">New round</button>
+    <div class="score" id="score">Score: 0 / 20</div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <footer>Headway Beginner's &middot; Marala's online practice</footer>
+</div>
+
+<script>
+  // DATA START
+  // P(sentence, answer, baseVerb, verbTranslation, sentenceTranslation)
+  // N(sentence, "don't"|"doesn't", baseVerb, verbTranslation, sentenceTranslation)
+  // Q(sentence, "do"|"does", baseVerb, verbTranslation, sentenceTranslation)  -> two gaps: auxiliary + verb
+  const P = (s, ans, verb, verbRu, ru) => ({ type:"positive", s, blanks:[[ans]], verb, verbRu, ru });
+  const N = (s, aux, verb, verbRu, ru) => {
+    const full = aux === "don't" ? "do not" : "does not";
+    return { type:"negative", s, blanks:[[aux + " " + verb, full + " " + verb]], verb, verbRu, ru };
+  };
+  const Q = (s, aux, verb, verbRu, ru) => ({ type:"question", s, blanks:[[aux],[verb]], verb, verbRu, ru });
+
+  const POSITIVE = [
+    // I
+    P("I ___ in a small flat in Leeds.", "live", "live", "жить", "Я живу в маленькой квартире в Лидсе."),
+    P("I ___ to work by bus.", "go", "go", "ездить", "Я езжу на работу на автобусе."),
+    P("I ___ English every Tuesday and Thursday.", "study", "study", "изучать", "Я изучаю английский по вторникам и четвергам."),
+    P("I ___ a big family.", "have", "have", "иметь", "У меня большая семья."),
+    P("I ___ football with my friends on Saturdays.", "play", "play", "играть", "По субботам я играю в футбол с друзьями."),
+    P("I ___ at half past six.", "get up", "get up", "вставать", "Я встаю в половине седьмого."),
+    P("I ___ to music on my way to school.", "listen", "listen", "слушать", "По дороге в школу я слушаю музыку."),
+    P("I ___ my homework after dinner.", "do", "do", "делать", "После ужина я делаю домашнее задание."),
+    P("I ___ toast and jam for breakfast.", "eat", "eat", "есть", "На завтрак я ем тосты с джемом."),
+    P("I ___ a little Spanish.", "speak", "speak", "говорить", "Я немного говорю по-испански."),
+    // You
+    P("You ___ really well.", "cook", "cook", "готовить", "Ты очень хорошо готовишь."),
+    P("You ___ a lot of coffee.", "drink", "drink", "пить", "Ты пьёшь много кофе."),
+    P("You ___ your homework very quickly.", "finish", "finish", "заканчивать", "Ты очень быстро заканчиваешь домашнее задание."),
+    P("You ___ me every day.", "call", "call", "звонить", "Ты звонишь мне каждый день."),
+    P("You ___ a lovely voice.", "have", "have", "иметь", "У тебя прекрасный голос."),
+    P("You ___ tennis really well.", "play", "play", "играть", "Ты очень хорошо играешь в теннис."),
+    P("You ___ a lot of books.", "read", "read", "читать", "Ты читаешь много книг."),
+    P("You ___ at the same school as my cousin.", "study", "study", "учиться", "Ты учишься в той же школе, что и мой двоюродный брат."),
+    P("You ___ very early on Sundays.", "wake up", "wake up", "просыпаться", "По воскресеньям ты просыпаешься очень рано."),
+    P("You two ___ like brothers!", "look", "look", "выглядеть", "Вы двое выглядите как братья!"),
+    // He
+    P("He ___ in a bank in the city centre.", "works", "work", "работать", "Он работает в банке в центре города."),
+    P("He ___ his dog in the park every morning.", "walks", "walk", "выгуливать", "Каждое утро он выгуливает собаку в парке."),
+    P("He ___ a motorbike to work.", "rides", "ride", "ездить на", "Он ездит на работу на мотоцикле."),
+    P("He ___ the news on TV every evening.", "watches", "watch", "смотреть", "Каждый вечер он смотрит новости по телевизору."),
+    P("He ___ two children and a cat.", "has", "have", "иметь", "У него двое детей и кошка."),
+    P("He ___ to school by bike.", "goes", "go", "ездить", "Он ездит в школу на велосипеде."),
+    P("He ___ French at a language school.", "teaches", "teach", "преподавать", "Он преподаёт французский в языковой школе."),
+    P("He ___ his car every Sunday.", "washes", "wash", "мыть", "Каждое воскресенье он моет машину."),
+    P("He ___ a lot of emails at work.", "writes", "write", "писать", "На работе он пишет много электронных писем."),
+    P("He ___ his grandparents every summer.", "visits", "visit", "навещать", "Каждое лето он навещает бабушку и дедушку."),
+    P("He ___ pizza for dinner on Fridays.", "makes", "make", "готовить", "По пятницам он готовит пиццу на ужин."),
+    P("He ___ the piano very well.", "plays", "play", "играть", "Он очень хорошо играет на пианино."),
+    // She
+    P("She ___ at seven every day.", "gets up", "get up", "вставать", "Она встаёт в семь каждый день."),
+    P("She ___ at a university in Edinburgh.", "studies", "study", "учиться", "Она учится в университете в Эдинбурге."),
+    P("She ___ a lot of photos on holiday.", "takes", "take", "делать", "В отпуске она делает много фотографий."),
+    P("She ___ yoga on Monday evenings.", "does", "do", "заниматься", "По вечерам в понедельник она занимается йогой."),
+    P("She ___ her best friend every weekend.", "sees", "see", "видеться с", "Каждые выходные она видится с лучшей подругой."),
+    P("She ___ coffee in the morning, but tea in the afternoon.", "drinks", "drink", "пить", "Утром она пьёт кофе, а днём — чай."),
+    P("She ___ the bus at the corner of Park Road.", "catches", "catch", "садиться на", "Она садится на автобус на углу Парк-роуд."),
+    P("She ___ a lot of books about history.", "reads", "read", "читать", "Она читает много книг по истории."),
+    P("She ___ her mother with the shopping on Saturdays.", "helps", "help", "помогать", "По субботам она помогает маме с покупками."),
+    P("She ___ English and Italian.", "speaks", "speak", "говорить", "Она говорит по-английски и по-итальянски."),
+    P("She ___ in the sea every day in summer.", "swims", "swim", "плавать", "Летом она каждый день плавает в море."),
+    P("She ___ a small flower shop in the town centre.", "has", "have", "иметь", "У неё небольшой цветочный магазин в центре города."),
+    // It
+    P("It ___ a lot in Manchester in autumn.", "rains", "rain", "идти (дождь)", "Осенью в Манчестере часто идёт дождь."),
+    P("It ___ in the mountains every winter.", "snows", "snow", "идти (снег)", "Каждую зиму в горах идёт снег."),
+    P("It ___ about ten pounds.", "costs", "cost", "стоить", "Это стоит около десяти фунтов."),
+    P("It ___ dark very early in winter.", "gets", "get", "становиться", "Зимой очень рано темнеет."),
+    P("It ___ me an hour to get to work.", "takes", "take", "занимать (время)", "Дорога до работы занимает у меня час."),
+    P("It ___ like a lovely day.", "looks", "look", "выглядеть", "Похоже, будет прекрасный день."),
+    P("My plant is small, but it ___ a lot of water.", "needs", "need", "нуждаться в", "Моё растение маленькое, но ему нужно много воды."),
+    P("It ___ like a good idea.", "sounds", "sound", "звучать", "Звучит как хорошая идея."),
+    // We
+    P("We ___ in the same street.", "live", "live", "жить", "Мы живём на одной улице."),
+    P("We ___ a big garden behind the house.", "have", "have", "иметь", "У нас большой сад за домом."),
+    P("We ___ pizza on Friday evenings.", "eat", "eat", "есть", "По пятницам вечером мы едим пиццу."),
+    P("We ___ the bus to the city centre.", "take", "take", "добираться", "В центр города мы ездим на автобусе."),
+    P("We ___ films at the weekend.", "watch", "watch", "смотреть", "По выходным мы смотрим фильмы."),
+    P("We ___ our grandparents on Sundays.", "visit", "visit", "навещать", "По воскресеньям мы навещаем бабушку и дедушку."),
+    P("We ___ a lot of homework in the evening.", "do", "do", "делать", "Вечером мы делаем много домашних заданий."),
+    P("We ___ for the bus at the same stop every day.", "wait", "wait", "ждать", "Каждый день мы ждём автобус на одной и той же остановке."),
+    P("We ___ lots of questions in English class.", "ask", "ask", "задавать", "На уроке английского мы задаём много вопросов."),
+    P("We ___ to the sea every summer.", "go", "go", "ездить", "Каждое лето мы ездим на море."),
+    // They
+    P("They ___ in a beautiful house near the lake.", "live", "live", "жить", "Они живут в красивом доме у озера."),
+    P("They ___ Spanish at home.", "speak", "speak", "говорить", "Дома они говорят по-испански."),
+    P("They ___ a new car every five years.", "buy", "buy", "покупать", "Они покупают новую машину каждые пять лет."),
+    P("They ___ at nine o'clock and finish at five.", "start", "start", "начинать", "Они начинают в девять часов, а заканчивают в пять."),
+    P("They ___ football every Saturday morning.", "play", "play", "играть", "Каждую субботу утром они играют в футбол."),
+    P("They ___ apples and pears in their garden.", "grow", "grow", "выращивать", "Они выращивают яблоки и груши в своём саду."),
+    P("They ___ on the phone for hours.", "talk", "talk", "разговаривать", "Они часами разговаривают по телефону."),
+    P("They ___ the shop at six o'clock.", "close", "close", "закрывать", "Они закрывают магазин в шесть часов."),
+    P("They ___ English at a language school.", "study", "study", "изучать", "Они изучают английский в языковой школе."),
+    P("They ___ their cousins in Canada once a year.", "see", "see", "видеться с", "Раз в год они видятся со своими двоюродными братьями и сёстрами в Канаде."),
+    // Names, people, things
+    P("Tom ___ the guitar in a band.", "plays", "play", "играть", "Том играет на гитаре в группе."),
+    P("Anna ___ to work by train.", "goes", "go", "ездить", "Анна ездит на работу на поезде."),
+    P("My mother ___ delicious cakes at the weekend.", "bakes", "bake", "печь", "По выходным моя мама печёт вкусные торты."),
+    P("My father ___ the newspaper every morning.", "reads", "read", "читать", "Каждое утро мой отец читает газету."),
+    P("Our teacher ___ a lot of funny stories.", "tells", "tell", "рассказывать", "Наш учитель рассказывает много смешных историй."),
+    P("My brother ___ in a café in the evenings.", "works", "work", "работать", "По вечерам мой брат работает в кафе."),
+    P("Rosie ___ the piano every day after school.", "practises", "practise", "заниматься", "Каждый день после школы Рози занимается на пианино."),
+    P("The bus ___ at ten past eight.", "leaves", "leave", "отправляться", "Автобус отправляется в десять минут девятого."),
+    P("The shop ___ at nine o'clock.", "opens", "open", "открываться", "Магазин открывается в девять часов."),
+    P("The film ___ at half past seven.", "starts", "start", "начинаться", "Фильм начинается в половине восьмого."),
+    P("This restaurant ___ very good pizza.", "makes", "make", "готовить", "В этом ресторане готовят очень вкусную пиццу."),
+    P("My alarm clock ___ at six every morning.", "rings", "ring", "звонить", "Мой будильник звонит в шесть каждое утро."),
+    P("The sun ___ in the east.", "rises", "rise", "восходить", "Солнце встаёт на востоке."),
+    P("The museum ___ a lot of visitors in summer.", "gets", "get", "получать", "Летом в музее бывает много посетителей."),
+    P("Our train ___ at platform four.", "arrives", "arrive", "прибывать", "Наш поезд прибывает на четвёртую платформу."),
+    P("My parents ___ in a village near Bath.", "live", "live", "жить", "Мои родители живут в деревне недалеко от Бата."),
+    P("My friends ___ me at the café every Friday.", "meet", "meet", "встречаться с", "Каждую пятницу мои друзья встречаются со мной в кафе."),
+    P("The children ___ in the garden after school.", "play", "play", "играть", "После школы дети играют в саду."),
+    P("The students ___ a lot of new words every week.", "learn", "learn", "учить", "Каждую неделю студенты учат много новых слов."),
+    P("Tom and Anna ___ in a supermarket.", "work", "work", "работать", "Том и Анна работают в супермаркете."),
+    P("Her parents ___ two cars.", "have", "have", "иметь", "У её родителей две машины."),
+    P("The kids ___ cartoons on Saturday mornings.", "watch", "watch", "смотреть", "По субботам утром дети смотрят мультфильмы."),
+    P("Maria ___ in a school in Brighton.", "teaches", "teach", "преподавать", "Мария преподаёт в школе в Брайтоне."),
+    P("Mr Brown ___ a lot of letters every day.", "gets", "get", "получать", "Мистер Браун каждый день получает много писем."),
+    P("Ben ___ a shower before breakfast.", "has", "have", "иметь", "Бен принимает душ перед завтраком."),
+    P("My cat ___ on my bed all day.", "sleeps", "sleep", "спать", "Моя кошка спит на моей кровати весь день."),
+    P("Her dog ___ in the garden all afternoon.", "runs", "run", "бегать", "Её собака бегает по саду весь день."),
+    P("My uncle ___ a taxi in London.", "drives", "drive", "водить", "Мой дядя водит такси в Лондоне."),
+  ];
+
+  const NEGATIVE = [
+    // I
+    N("I ___ coffee in the evening.", "don't", "drink", "пить", "Вечером я не пью кофе."),
+    N("I ___ much TV.", "don't", "watch", "смотреть", "Я мало смотрю телевизор."),
+    N("I ___ in the city centre.", "don't", "live", "жить", "Я не живу в центре города."),
+    N("I ___ to work at the weekend.", "don't", "go", "ходить", "По выходным я не хожу на работу."),
+    N("I ___ meat.", "don't", "eat", "есть", "Я не ем мясо."),
+    N("I ___ any French.", "don't", "speak", "говорить", "Я совсем не говорю по-французски."),
+    N("I ___ a car.", "don't", "have", "иметь", "У меня нет машины."),
+    N("I ___ my phone in class.", "don't", "use", "пользоваться", "Я не пользуюсь телефоном на уроке."),
+    N("I ___ early on Sundays.", "don't", "get up", "вставать", "По воскресеньям я не встаю рано."),
+    N("I ___ the answer.", "don't", "know", "знать", "Я не знаю ответа."),
+    // You
+    N("You ___ enough water.", "don't", "drink", "пить", "Ты пьёшь недостаточно воды."),
+    N("You ___ to me when I speak.", "don't", "listen", "слушать", "Ты не слушаешь меня, когда я говорю."),
+    N("You ___ enough at night.", "don't", "sleep", "спать", "Ночью ты спишь недостаточно."),
+    N("You ___ on Sundays.", "don't", "work", "работать", "По воскресеньям ты не работаешь."),
+    N("You ___ like your brother.", "don't", "look", "выглядеть", "Ты не похож на своего брата."),
+    N("You ___ any pets.", "don't", "have", "иметь", "У тебя нет домашних животных."),
+    N("You ___ me much about your family.", "don't", "tell", "рассказывать", "Ты мало рассказываешь мне о своей семье."),
+    N("You ___ breakfast in the morning.", "don't", "eat", "есть", "Утром ты не завтракаешь."),
+    N("You ___ to school by bus.", "don't", "go", "ездить", "Ты не ездишь в школу на автобусе."),
+    N("You ___ my phone number.", "don't", "know", "знать", "Ты не знаешь мой номер телефона."),
+    // He
+    N("He ___ in London.", "doesn't", "live", "жить", "Он не живёт в Лондоне."),
+    N("He ___ sugar in his tea.", "doesn't", "take", "класть", "Он не кладёт сахар в чай."),
+    N("He ___ on Saturdays.", "doesn't", "work", "работать", "По субботам он не работает."),
+    N("He ___ a mobile phone.", "doesn't", "have", "иметь", "У него нет мобильного телефона."),
+    N("He ___ English very well.", "doesn't", "speak", "говорить", "Он не очень хорошо говорит по-английски."),
+    N("He ___ fish.", "doesn't", "eat", "есть", "Он не ест рыбу."),
+    N("He ___ the bus to school.", "doesn't", "take", "добираться", "Он не ездит в школу на автобусе."),
+    N("He ___ his room very often.", "doesn't", "clean", "убирать", "Он не очень часто убирает свою комнату."),
+    N("He ___ many films.", "doesn't", "watch", "смотреть", "Он смотрит не очень много фильмов."),
+    N("He ___ me at the weekend.", "doesn't", "call", "звонить", "По выходным он мне не звонит."),
+    N("He ___ football.", "doesn't", "play", "играть", "Он не играет в футбол."),
+    N("He ___ his homework on Fridays.", "doesn't", "do", "делать", "По пятницам он не делает домашнее задание."),
+    // She
+    N("She ___ in an office.", "doesn't", "work", "работать", "Она не работает в офисе."),
+    N("She ___ coffee.", "doesn't", "like", "любить", "Она не любит кофе."),
+    N("She ___ a car.", "doesn't", "drive", "водить", "Она не водит машину."),
+    N("She ___ on Sundays.", "doesn't", "cook", "готовить", "По воскресеньям она не готовит."),
+    N("She ___ lunch at school.", "doesn't", "eat", "есть", "В школе она не обедает."),
+    N("She ___ Spanish.", "doesn't", "understand", "понимать", "Она не понимает по-испански."),
+    N("She ___ her grandparents very often.", "doesn't", "see", "видеться с", "Она нечасто видится с бабушкой и дедушкой."),
+    N("She ___ to music at work.", "doesn't", "listen", "слушать", "На работе она не слушает музыку."),
+    N("She ___ much chocolate.", "doesn't", "buy", "покупать", "Она не покупает много шоколада."),
+    N("She ___ any brothers or sisters.", "doesn't", "have", "иметь", "У неё нет братьев и сестёр."),
+    N("She ___ at weekends.", "doesn't", "study", "заниматься", "По выходным она не занимается."),
+    N("She ___ the news.", "doesn't", "read", "читать", "Она не читает новости."),
+    // It
+    N("It ___ in July.", "doesn't", "snow", "идти (снег)", "В июле снег не идёт."),
+    N("It ___ a lot here in summer.", "doesn't", "rain", "идти (дождь)", "Летом здесь дождь идёт нечасто."),
+    N("It ___ much.", "doesn't", "cost", "стоить", "Это стоит недорого."),
+    N("My old laptop is very slow. It ___ well.", "doesn't", "work", "работать", "Мой старый ноутбук очень медленный. Он плохо работает."),
+    N("It ___ a lot of time to cook pasta.", "doesn't", "take", "занимать (время)", "На приготовление пасты уходит немного времени."),
+    N("It ___ like rain today.", "doesn't", "look", "выглядеть", "Сегодня не похоже на дождь."),
+    N("It ___ dark early in summer.", "doesn't", "get", "становиться", "Летом рано не темнеет."),
+    N("Our flat is small. It ___ a balcony.", "doesn't", "have", "иметь", "Наша квартира маленькая. В ней нет балкона."),
+    // We
+    N("We ___ a TV in the kitchen.", "don't", "have", "иметь", "У нас нет телевизора на кухне."),
+    N("We ___ to school on Saturdays.", "don't", "go", "ходить", "По субботам мы не ходим в школу."),
+    N("We ___ dinner on Fridays.", "don't", "cook", "готовить", "По пятницам мы не готовим ужин."),
+    N("We ___ much time in the morning.", "don't", "have", "иметь", "Утром у нас мало времени."),
+    N("We ___ our new neighbours.", "don't", "know", "знать", "Мы не знаем наших новых соседей."),
+    N("We ___ a lot of milk.", "don't", "need", "нуждаться в", "Нам не нужно много молока."),
+    N("We ___ TV after ten o'clock.", "don't", "watch", "смотреть", "После десяти часов мы не смотрим телевизор."),
+    N("We ___ our friends very often.", "don't", "see", "видеться с", "Мы не очень часто видимся с друзьями."),
+    N("We ___ in a big house.", "don't", "live", "жить", "Мы не живём в большом доме."),
+    N("We ___ the same music.", "don't", "like", "нравиться", "Нам не нравится одна и та же музыка."),
+    // They
+    N("They ___ here.", "don't", "live", "жить", "Они здесь не живут."),
+    N("They ___ English at home.", "don't", "speak", "говорить", "Дома они не говорят по-английски."),
+    N("They ___ new clothes very often.", "don't", "buy", "покупать", "Они не очень часто покупают новую одежду."),
+    N("They ___ in a factory.", "don't", "work", "работать", "Они не работают на заводе."),
+    N("They ___ the bus.", "don't", "take", "добираться", "Они не ездят на автобусе."),
+    N("They ___ any dessert.", "don't", "want", "хотеть", "Они не хотят десерт."),
+    N("They ___ much money.", "don't", "earn", "зарабатывать", "Они не зарабатывают много денег."),
+    N("They ___ to the cinema very often.", "don't", "go", "ходить", "Они не очень часто ходят в кино."),
+    N("They ___ our address.", "don't", "know", "знать", "Они не знают наш адрес."),
+    N("They ___ at the same time every day.", "don't", "eat", "есть", "Они не едят в одно и то же время каждый день."),
+    // Names, people, things
+    N("Tom ___ breakfast.", "doesn't", "eat", "есть", "Том не завтракает."),
+    N("Anna ___ her bike to school.", "doesn't", "ride", "ездить на", "Анна не ездит в школу на велосипеде."),
+    N("My mother ___ coffee.", "doesn't", "drink", "пить", "Моя мама не пьёт кофе."),
+    N("My father ___ football.", "doesn't", "watch", "смотреть", "Мой отец не смотрит футбол."),
+    N("Our teacher ___ much homework.", "doesn't", "give", "задавать", "Наш учитель задаёт мало домашних заданий."),
+    N("My brother ___ in the evening.", "doesn't", "study", "заниматься", "По вечерам мой брат не занимается."),
+    N("Rosie ___ vegetables.", "doesn't", "eat", "есть", "Рози не ест овощи."),
+    N("This bus ___ to the station.", "doesn't", "go", "идти / ехать", "Этот автобус не идёт до вокзала."),
+    N("The shop ___ on Sundays.", "doesn't", "open", "открываться", "По воскресеньям магазин не открывается."),
+    N("The film ___ at six.", "doesn't", "start", "начинаться", "Фильм не начинается в шесть."),
+    N("This restaurant ___ pizza.", "doesn't", "serve", "подавать", "В этом ресторане не подают пиццу."),
+    N("My phone ___ photos very well.", "doesn't", "take", "делать", "Мой телефон не очень хорошо делает фотографии."),
+    N("The sun ___ in the north.", "doesn't", "rise", "восходить", "Солнце не восходит на севере."),
+    N("The museum ___ at four o'clock.", "doesn't", "close", "закрываться", "Музей не закрывается в четыре часа."),
+    N("Our train ___ at this station.", "doesn't", "stop", "останавливаться", "Наш поезд не останавливается на этой станции."),
+    N("My parents ___ TV in the morning.", "don't", "watch", "смотреть", "Утром мои родители не смотрят телевизор."),
+    N("My friends ___ near here.", "don't", "live", "жить", "Мои друзья не живут рядом."),
+    N("The children ___ vegetables.", "don't", "like", "любить", "Дети не любят овощи."),
+    N("The students ___ to school on Sundays.", "don't", "come", "приходить", "По воскресеньям студенты не приходят в школу."),
+    N("Tom and Anna ___ spicy food.", "don't", "like", "любить", "Том и Анна не любят острую еду."),
+    N("Her parents ___ English.", "don't", "speak", "говорить", "Её родители не говорят по-английски."),
+    N("The kids ___ their rooms.", "don't", "clean", "убирать", "Дети не убирают свои комнаты."),
+    N("Maria ___ in a big city.", "doesn't", "live", "жить", "Мария не живёт в большом городе."),
+    N("Mr Brown ___ many emails.", "doesn't", "get", "получать", "Мистер Браун не получает много электронных писем."),
+    N("Ben ___ any homework tonight.", "doesn't", "have", "иметь", "Сегодня вечером у Бена нет домашнего задания."),
+    N("My cat ___ milk.", "doesn't", "drink", "пить", "Моя кошка не пьёт молоко."),
+    N("Her dog ___ much.", "doesn't", "eat", "есть", "Её собака мало ест."),
+    N("My uncle ___ a computer.", "doesn't", "use", "пользоваться", "Мой дядя не пользуется компьютером."),
+  ];
+
+  const QUESTION = [
+    // I
+    Q("___ I ___ a ticket for this bus?", "do", "need", "нуждаться в", "Мне нужен билет на этот автобус?"),
+    Q("___ I ___ tired today?", "do", "look", "выглядеть", "Вид у меня сегодня усталый?"),
+    Q("What time ___ I ___ work tomorrow?", "do", "start", "начинать", "Во сколько я завтра начинаю работу?"),
+    Q("Where ___ I ___ my bag?", "do", "put", "класть", "Куда мне положить сумку?"),
+    Q("___ I ___ a lot of homework this week?", "do", "have", "иметь", "У меня на этой неделе много домашних заданий?"),
+    Q("How ___ I ___ to the museum from here?", "do", "get", "добираться", "Как мне добраться отсюда до музея?"),
+    // You
+    Q("___ you ___ coffee in the morning?", "do", "drink", "пить", "Ты пьёшь кофе по утрам?"),
+    Q("___ you ___ with your parents?", "do", "live", "жить", "Ты живёшь с родителями?"),
+    Q("___ you ___ English every day?", "do", "speak", "говорить", "Ты каждый день говоришь по-английски?"),
+    Q("___ you ___ a bike?", "do", "have", "иметь", "У тебя есть велосипед?"),
+    Q("Where ___ you ___?", "do", "work", "работать", "Где ты работаешь?"),
+    Q("What ___ you ___ for breakfast?", "do", "eat", "есть", "Что ты ешь на завтрак?"),
+    Q("What time ___ you ___ on Saturdays?", "do", "get up", "вставать", "Во сколько ты встаёшь по субботам?"),
+    Q("How ___ you ___ to school?", "do", "get", "добираться", "Как ты добираешься до школы?"),
+    Q("Why ___ you ___ so quickly?", "do", "eat", "есть", "Почему ты ешь так быстро?"),
+    Q("___ you ___ football on Sundays?", "do", "play", "играть", "Ты играешь в футбол по воскресеньям?"),
+    Q("___ you ___ any brothers or sisters?", "do", "have", "иметь", "У тебя есть братья или сёстры?"),
+    Q("When ___ you ___ your homework?", "do", "do", "делать", "Когда ты делаешь домашнее задание?"),
+    Q("___ you ___ my sister?", "do", "know", "знать", "Ты знаешь мою сестру?"),
+    Q("Where ___ you ___ your holidays?", "do", "spend", "проводить", "Где ты проводишь отпуск?"),
+    Q("___ you ___ this song?", "do", "like", "нравиться", "Тебе нравится эта песня?"),
+    Q("___ you ___ to music when you study?", "do", "listen", "слушать", "Ты слушаешь музыку, когда занимаешься?"),
+    Q("Which bus ___ you ___ to work?", "do", "take", "добираться", "На каком автобусе ты ездишь на работу?"),
+    Q("___ you ___ lunch at school?", "do", "eat", "есть", "Ты обедаешь в школе?"),
+    Q("What ___ you ___ at the weekend?", "do", "do", "делать", "Чем ты занимаешься по выходным?"),
+    Q("___ you ___ chocolate?", "do", "love", "любить", "Ты любишь шоколад?"),
+    // He
+    Q("___ he ___ near the school?", "does", "live", "жить", "Он живёт рядом со школой?"),
+    Q("___ he ___ a car?", "does", "drive", "водить", "Он водит машину?"),
+    Q("Where ___ he ___?", "does", "work", "работать", "Где он работает?"),
+    Q("What time ___ he ___ work?", "does", "finish", "заканчивать", "Во сколько он заканчивает работу?"),
+    Q("___ he ___ a big family?", "does", "have", "иметь", "У него большая семья?"),
+    Q("___ he ___ coffee or tea?", "does", "want", "хотеть", "Он хочет кофе или чай?"),
+    Q("What ___ he ___ in the evenings?", "does", "do", "делать", "Чем он занимается по вечерам?"),
+    Q("___ he ___ football on TV?", "does", "watch", "смотреть", "Он смотрит футбол по телевизору?"),
+    Q("How ___ he ___ to work?", "does", "get", "добираться", "Как он добирается до работы?"),
+    Q("Why ___ he ___ the window?", "does", "open", "открывать", "Почему он открывает окно?"),
+    // She
+    Q("___ she ___ French?", "does", "speak", "говорить", "Она говорит по-французски?"),
+    Q("___ she ___ a dog?", "does", "have", "иметь", "У неё есть собака?"),
+    Q("Where ___ she ___ lunch?", "does", "eat", "есть", "Где она обедает?"),
+    Q("What ___ she ___ in her free time?", "does", "do", "делать", "Чем она занимается в свободное время?"),
+    Q("___ she ___ to school by bus?", "does", "go", "ездить", "Она ездит в школу на автобусе?"),
+    Q("What time ___ she ___ to bed?", "does", "go", "идти", "Во сколько она ложится спать?"),
+    Q("___ she ___ tea with milk?", "does", "like", "любить", "Она любит чай с молоком?"),
+    Q("___ she ___ you every day?", "does", "call", "звонить", "Она звонит тебе каждый день?"),
+    Q("Why ___ she ___ home so late?", "does", "come", "приходить", "Почему она приходит домой так поздно?"),
+    Q("___ she ___ her mother with the housework?", "does", "help", "помогать", "Она помогает маме по дому?"),
+    // It
+    Q("___ it ___ a lot in your town?", "does", "rain", "идти (дождь)", "В вашем городе часто идёт дождь?"),
+    Q("___ it ___ in winter here?", "does", "snow", "идти (снег)", "Здесь зимой идёт снег?"),
+    Q("How much ___ it ___?", "does", "cost", "стоить", "Сколько это стоит?"),
+    Q("___ it ___ a swimming pool?", "does", "have", "иметь", "Там есть бассейн?"),
+    Q("What time ___ it ___?", "does", "start", "начинаться", "Во сколько это начинается?"),
+    Q("How long ___ it ___ to get to the airport?", "does", "take", "занимать (время)", "Сколько времени занимает дорога до аэропорта?"),
+    Q("___ it ___ cold here at night?", "does", "get", "становиться", "Здесь ночью становится холодно?"),
+    Q("___ it ___ without batteries?", "does", "work", "работать", "Оно работает без батареек?"),
+    // We
+    Q("___ we ___ homework for tomorrow?", "do", "have", "иметь", "У нас есть домашнее задание на завтра?"),
+    Q("What time ___ we ___ the lesson?", "do", "start", "начинать", "Во сколько мы начинаем урок?"),
+    Q("Where ___ we ___ tomorrow?", "do", "meet", "встречаться", "Где мы встречаемся завтра?"),
+    Q("___ we ___ to bring anything?", "do", "need", "нуждаться", "Нам нужно что-нибудь принести?"),
+    Q("___ we ___ a test on Friday?", "do", "have", "иметь", "У нас в пятницу контрольная?"),
+    Q("Which bus ___ we ___?", "do", "take", "добираться", "На каком автобусе мы едем?"),
+    Q("___ we ___ our books to class?", "do", "bring", "приносить", "Мы приносим книги на урок?"),
+    Q("How ___ we ___ this word?", "do", "spell", "писать по буквам", "Как пишется это слово?"),
+    // They
+    Q("___ they ___ near here?", "do", "live", "жить", "Они живут недалеко отсюда?"),
+    Q("___ they ___ English at school?", "do", "study", "изучать", "Они изучают английский в школе?"),
+    Q("Where ___ they ___ from?", "do", "come", "происходить", "Откуда они родом?"),
+    Q("What ___ they ___ for dinner?", "do", "cook", "готовить", "Что они готовят на ужин?"),
+    Q("___ they ___ a big house?", "do", "have", "иметь", "У них большой дом?"),
+    Q("What time ___ they ___ school?", "do", "start", "начинать", "Во сколько у них начинаются занятия?"),
+    Q("___ they ___ tennis on Saturdays?", "do", "play", "играть", "Они играют в теннис по субботам?"),
+    Q("___ they ___ their grandparents often?", "do", "visit", "навещать", "Они часто навещают бабушку и дедушку?"),
+    Q("Why ___ they ___ so early?", "do", "leave", "уходить", "Почему они уходят так рано?"),
+    Q("___ they ___ your phone number?", "do", "know", "знать", "Они знают твой номер телефона?"),
+    // Names, people, things
+    Q("___ Tom ___ in a band?", "does", "play", "играть", "Том играет в группе?"),
+    Q("___ Anna ___ in a hospital?", "does", "work", "работать", "Анна работает в больнице?"),
+    Q("What ___ your mother ___ on Sundays?", "does", "do", "делать", "Чем твоя мама занимается по воскресеньям?"),
+    Q("___ your father ___ to work?", "does", "drive", "ездить на машине", "Твой отец ездит на работу на машине?"),
+    Q("___ your teacher ___ English in class?", "does", "speak", "говорить", "Ваш учитель говорит на уроке по-английски?"),
+    Q("Where ___ your brother ___?", "does", "study", "учиться", "Где учится твой брат?"),
+    Q("___ Rosie ___ any pets?", "does", "have", "иметь", "У Рози есть домашние животные?"),
+    Q("What time ___ the bus ___?", "does", "leave", "отправляться", "Во сколько отправляется автобус?"),
+    Q("What time ___ the shop ___?", "does", "close", "закрываться", "Во сколько закрывается магазин?"),
+    Q("When ___ the film ___?", "does", "finish", "заканчиваться", "Когда заканчивается фильм?"),
+    Q("___ this restaurant ___ vegetarian food?", "does", "have", "иметь", "В этом ресторане есть вегетарианские блюда?"),
+    Q("___ your phone ___ well?", "does", "work", "работать", "Твой телефон хорошо работает?"),
+    Q("___ the sun ___ early in summer?", "does", "rise", "восходить", "Солнце летом встаёт рано?"),
+    Q("How much ___ a ticket ___?", "does", "cost", "стоить", "Сколько стоит билет?"),
+    Q("Which platform ___ our train ___ from?", "does", "leave", "отправляться", "С какой платформы отправляется наш поезд?"),
+    Q("___ your parents ___ in the city?", "do", "live", "жить", "Твои родители живут в городе?"),
+    Q("Where ___ your friends ___ from?", "do", "come", "происходить", "Откуда родом твои друзья?"),
+    Q("___ the children ___ milk for breakfast?", "do", "drink", "пить", "Дети пьют молоко на завтрак?"),
+    Q("How ___ the students ___ to school?", "do", "get", "добираться", "Как студенты добираются до школы?"),
+    Q("___ Tom and Anna ___ in the same office?", "do", "work", "работать", "Том и Анна работают в одном офисе?"),
+    Q("What ___ her parents ___?", "do", "do", "делать", "Кем работают её родители?"),
+    Q("___ the kids ___ cartoons?", "do", "like", "любить", "Дети любят мультфильмы?"),
+    Q("___ Maria ___ English at school?", "does", "teach", "преподавать", "Мария преподаёт английский в школе?"),
+    Q("What time ___ Mr Brown ___ home?", "does", "get", "добираться", "Во сколько мистер Браун приходит домой?"),
+    Q("___ Ben ___ sugar in his tea?", "does", "take", "класть", "Бен кладёт сахар в чай?"),
+    Q("___ your cat ___ on your bed?", "does", "sleep", "спать", "Твоя кошка спит на твоей кровати?"),
+    Q("___ her dog ___ a lot of food?", "does", "need", "нуждаться в", "Её собаке нужно много еды?"),
+    Q("___ your uncle ___ in a hotel?", "does", "work", "работать", "Твой дядя работает в отеле?"),
+  ];
+  // DATA END
+
+  const ALL_DATA = [...POSITIVE, ...NEGATIVE, ...QUESTION];
+  const ROUND_SIZE = 20;
+
+  // ---------- HELPERS ----------
+  function normalize(str){
+    return str
+      .toLowerCase()
+      .trim()
+      .replace(/[’‘`]/g, "'")
+      .replace(/'/g, "")
+      .replace(/[.?!,]/g, "")
+      .replace(/\s+/g, " ");
+  }
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function pickRound(n){
+    return shuffle(ALL_DATA).slice(0, n);
+  }
+
+  const listEl = document.getElementById("list");
+  const scoreEl = document.getElementById("score");
+  let currentRound = [];
+
+  function buildItem(index, entry){
+    const parts = entry.s.split("___");
+    const item = document.createElement("div");
+    item.className = "item " + entry.type;
+    item.dataset.accepted = JSON.stringify(entry.blanks.map(list => list.map(normalize)));
+    item.dataset.display = JSON.stringify(entry.blanks.map(list => list.join(" / ")));
+
+    const num = document.createElement("div");
+    num.className = "num";
+    num.textContent = index + 1;
+    item.appendChild(num);
+
+    const main = document.createElement("div");
+    main.className = "main";
+
+    const sentenceEl = document.createElement("div");
+    sentenceEl.className = "sentence";
+
+    const feedback = document.createElement("div");
+    feedback.className = "feedback";
+
+    const inputs = [];
+    parts.forEach((part, i) => {
+      sentenceEl.appendChild(document.createTextNode(part));
+      if (i < parts.length - 1){
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "blank";
+        input.autocomplete = "off";
+        input.autocapitalize = "off";
+        input.spellcheck = false;
+        input.placeholder = "...";
+        input.addEventListener("input", () => {
+          item.classList.remove("correct", "wrong");
+          input.classList.remove("correct", "wrong");
+          feedback.textContent = "";
+          feedback.className = "feedback";
+          updateScore();
+        });
+        input.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter") return;
+          e.preventDefault();
+          const next = inputs[i + 1];
+          if (next && !next.value.trim()){
+            next.focus();
+          } else {
+            checkOne(item);
+          }
+        });
+        inputs.push(input);
+        sentenceEl.appendChild(input);
+      }
+    });
+
+    const translationEl = document.createElement("div");
+    translationEl.className = "translation";
+    translationEl.textContent = entry.ru;
+
+    main.appendChild(sentenceEl);
+    main.appendChild(translationEl);
+    item.appendChild(main);
+
+    const verbEl = document.createElement("div");
+    verbEl.className = "verb";
+    const base = document.createElement("span");
+    base.className = "verb-base";
+    base.textContent = "(" + entry.verb + ")";
+    const ru = document.createElement("span");
+    ru.className = "verb-ru";
+    ru.textContent = entry.verbRu;
+    verbEl.appendChild(base);
+    verbEl.appendChild(ru);
+    item.appendChild(verbEl);
+
+    const typeTag = document.createElement("div");
+    typeTag.className = "type-tag " + entry.type;
+    typeTag.textContent = entry.type;
+    item.appendChild(typeTag);
+
+    const checkBtn = document.createElement("button");
+    checkBtn.className = "check-one";
+    checkBtn.type = "button";
+    checkBtn.textContent = "Check";
+    checkBtn.addEventListener("click", () => checkOne(item));
+    item.appendChild(checkBtn);
+
+    item.appendChild(feedback);
+
+    return item;
+  }
+
+  function checkOne(item){
+    const inputs = Array.from(item.querySelectorAll("input.blank"));
+    const feedback = item.querySelector(".feedback");
+    const accepted = JSON.parse(item.dataset.accepted);
+    const display = JSON.parse(item.dataset.display);
+    const values = inputs.map(inp => normalize(inp.value));
+
+    if (values.some(v => !v)){
+      inputs.forEach((inp, i) => {
+        inp.classList.remove("correct", "wrong");
+        if (!values[i]) inp.classList.add("wrong");
+      });
+      item.classList.remove("correct");
+      item.classList.add("wrong");
+      feedback.className = "feedback bad";
+      feedback.textContent = inputs.length > 1
+        ? "Please fill in every box first."
+        : "Please write an answer first.";
+      updateScore();
+      return;
+    }
+
+    let allCorrect = true;
+    inputs.forEach((inp, i) => {
+      const ok = accepted[i].includes(values[i]);
+      inp.classList.remove("correct", "wrong");
+      inp.classList.add(ok ? "correct" : "wrong");
+      if (!ok) allCorrect = false;
+    });
+
+    item.classList.remove("correct", "wrong");
+    if (allCorrect){
+      item.classList.add("correct");
+      feedback.className = "feedback ok";
+      feedback.textContent = "Correct!";
+    } else {
+      item.classList.add("wrong");
+      feedback.className = "feedback bad";
+      if (display.length === 1){
+        feedback.textContent = "Wrong. The correct answer is \"" + display[0] + "\".";
+      } else {
+        feedback.textContent = "Wrong. Correct answers: " + display.join(", ") + ".";
+      }
+    }
+    updateScore();
+  }
+
+  function checkAll(){
+    document.querySelectorAll(".item").forEach(checkOne);
+  }
+
+  function render(){
+    listEl.innerHTML = "";
+    currentRound.forEach((entry, i) => {
+      listEl.appendChild(buildItem(i, entry));
+    });
+    updateScore();
+  }
+
+  function resetAnswers(){
+    render();
+    window.scrollTo({ top: listEl.offsetTop - 140, behavior: "smooth" });
+  }
+
+  function newRound(){
+    currentRound = pickRound(ROUND_SIZE);
+    render();
+    window.scrollTo({ top: listEl.offsetTop - 140, behavior: "smooth" });
+  }
+
+  function updateScore(){
+    const total = document.querySelectorAll(".item").length;
+    const correct = document.querySelectorAll(".item.correct").length;
+    scoreEl.textContent = "Score: " + correct + " / " + total;
+  }
+
+  document.getElementById("checkAllBtn").addEventListener("click", checkAll);
+  document.getElementById("resetAllBtn").addEventListener("click", resetAnswers);
+  document.getElementById("newRoundBtn").addEventListener("click", newRound);
+
+  currentRound = pickRound(ROUND_SIZE);
+  render();
+</script>
+</body>
+</html>
